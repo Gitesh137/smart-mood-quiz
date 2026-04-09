@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mood Analyzer</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #333;
+}
+
+.container {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    width: 400px;
+}
+
+.mood {
+    font-size: 60px;
+    margin: 20px 0;
+}
+
+button {
+    padding: 10px;
+    margin: 5px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.yes {background: green; color: white;}
+.no {background: red; color: white;}
+.maybe {background: orange; color: white;}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Mood Test</h2>
+
+    <div class="mood" id="emoji">🙂</div>
+
+    <p id="question">Loading...</p>
+
+    <div>
+        <button class="yes" onclick="answer('yes')">Yes</button>
+        <button class="maybe" onclick="answer('maybe')">Maybe</button>
+        <button class="no" onclick="answer('no')">No</button>
+    </div>
+</div>
+
+<script>
+const questions = [
+"Do you feel energetic today?",
+"Are you feeling happy?",
+"Did you sleep well?",
+"Do you feel motivated?",
+"Are you excited about today?",
+"Do you feel relaxed?",
+"Are you enjoying your work/study?",
+"Do you feel confident?",
+"Do you want to go outside?",
+"Do you feel social today?",
+
+// Hard questions
+"Do you feel satisfied with your life right now?",
+"Do you feel emotionally stable?",
+"Are you free from overthinking?",
+"Do you feel mentally strong?",
+"Do you feel in control of your thoughts?"
+];
+
+let index = 0;
+let score = 0;
+
+function showQuestion() {
+    document.getElementById("question").innerText = questions[index];
+}
+
+function answer(type) {
+    if(type === "yes") score += 2;
+    if(type === "maybe") score += 1;
+    if(type === "no") score += 0;
+
+    updateEmoji();
+
+    index++;
+
+    if(index < questions.length){
+        showQuestion();
+    } else {
+        showResult();
+    }
+}
+
+function updateEmoji() {
+    let emoji = "🙂";
+
+    if(score < 10) emoji = "😔";
+    else if(score < 20) emoji = "😐";
+    else if(score < 25) emoji = "🙂";
+    else emoji = "😄";
+
+    document.getElementById("emoji").innerText = emoji;
+}
+
+function showResult() {
+    let result = "";
+
+    if(score < 10){
+        result = "You are feeling low 😔";
+    }
+    else if(score < 20){
+        result = "You are neutral 😐";
+    }
+    else if(score < 25){
+        result = "You are good 🙂";
+    }
+    else{
+        result = "You are very happy 😄";
+    }
+
+    document.querySelector(".container").innerHTML = `
+        <h2>Result</h2>
+        <div style="font-size:60px;">${document.getElementById("emoji").innerText}</div>
+        <p>${result}</p>
+        <button onclick="location.reload()">Restart</button>
+    `;
+}
+
+showQuestion();
+</script>
+
+</body>
+</html>
